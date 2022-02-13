@@ -3,8 +3,13 @@ package main
 import "fmt"
 
 func main() {
-	fmt.Println(GetTeamScore("lar/los_angeles_rams", 3))
-	fmt.Println(GetTeamScore("cin/cincinnati-bengals", 3))
+	ramsScore := GetTeamScore("lar/los_angeles_rams", 2)
+	bengalsScore := GetTeamScore("cin/cincinnati-bengals", 2)
+	if ramsScore > bengalsScore {
+		fmt.Printf("Rams win by %0.2f!\n", ramsScore-bengalsScore)
+	} else {
+		fmt.Printf("Bengals win by %0.2f!\n", bengalsScore-ramsScore)
+	}
 
 	/*
 		Notes:
