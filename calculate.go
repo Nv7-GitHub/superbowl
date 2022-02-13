@@ -44,6 +44,7 @@ func GetTeamScore(teamName string, depth int) float64 {
 		} else { // Lose, if you lost to a bad team it should subtract more
 			scores[i] = diff * (max - oppScores[i])
 		}
+		scores[i] *= game.ScoreMult
 	}
 
 	average := float64(0)

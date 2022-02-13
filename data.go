@@ -19,6 +19,7 @@ type Game struct {
 	Score         int
 	OpponentScore int
 	Opponent      string
+	ScoreMult     float64 // Makes postseason more important
 }
 
 var dataFile *os.File
@@ -78,6 +79,15 @@ func GetTeam(name string) Team {
 	events := data["page"].(map[string]interface{})["content"].(map[string]interface{})["scheduleData"].(map[string]interface{})["teamSchedule"].([]interface{})
 	games := make([]Game, 0)
 	for _, ev := range events {
+		scoreMult := float64(1)
+		switch ev.(map[string]interface{})["title"].(string) {
+		case "Preseason": // Not important
+			scoreMult = 0
+
+		case "Postseason": // Most important
+			scoreMult = 2
+		}
+
 		event := ev.(map[string]interface{})["events"].(map[string]interface{})
 		gameData := event["post"].([]interface{})
 		pre := event["pre"].([]interface{})
@@ -115,6 +125,7 @@ func GetTeam(name string) Team {
 				Score:         score,
 				OpponentScore: opponentScore,
 				Opponent:      opponent,
+				ScoreMult:     float64(scoreMult),
 			})
 		}
 	}
