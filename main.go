@@ -1,7 +1,7 @@
 package main
 
-import "errors"
+import "fmt"
 
 func main() {
-	panic(errors.New("not implemented"))
+	fmt.Println(GetTeamScore("lar/los_angeles_rams", 0))
 }
