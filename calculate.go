@@ -1,6 +1,6 @@
 package main
 
-func GetTeamScore(teamName string, depth int, noclamp ...bool) float64 {
+func GetTeamScore(teamName string, depth int) float64 {
 	if depth < 0 {
 		return 1
 	}
@@ -12,7 +12,20 @@ func GetTeamScore(teamName string, depth int, noclamp ...bool) float64 {
 	for i, game := range team.Games {
 		oppScores[i] = GetTeamScore(game.Opponent, depth-1)
 	}
-	max := float64(-1)
+
+	// Adjust oppScores so that lowest is 1
+	min := oppScores[0]
+	for _, score := range oppScores {
+		if score < min {
+			min = score
+		}
+	}
+	for i := range oppScores {
+		oppScores[i] += 1 - min
+	}
+
+	// Get max for later
+	max := oppScores[0]
 	for _, score := range oppScores {
 		if score > max {
 			max = score
@@ -22,6 +35,7 @@ func GetTeamScore(teamName string, depth int, noclamp ...bool) float64 {
 		max++ // Make loses worth the loss when doing average diff (otherwise max - oppScores[i] would just be 0)
 	}
 
+	// Calculate scores
 	scores := make([]float64, len(team.Games))
 	for i, game := range team.Games {
 		diff := float64(game.Score - game.OpponentScore)
@@ -38,8 +52,5 @@ func GetTeamScore(teamName string, depth int, noclamp ...bool) float64 {
 	}
 	average /= float64(len(scores))
 
-	if average < 1 && len(noclamp) == 0 { // Clamp to 1 so that when used recursively it doesn't hurt the team to play a bad team
-		return 1
-	}
 	return average
 }
