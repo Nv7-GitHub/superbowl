@@ -1,14 +1,23 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
+	"math"
+)
+
+const GameCount = 10
 
 func main() {
-	ramsScore := GetTeamScore("lar/los_angeles_rams", 2)
-	bengalsScore := GetTeamScore("cin/cincinnati-bengals", 2)
+	depth := 1
+	ramsScore := GetTeamScore("lar/los_angeles_rams", depth)
+	bengalsScore := GetTeamScore("cin/cincinnati-bengals", depth)
+
+	diff := math.Abs(ramsScore - bengalsScore)
+	diff = math.Pow(diff, 1/float64(depth+1))
 	if ramsScore > bengalsScore {
-		fmt.Printf("Rams win by %0.2f!\n", ramsScore-bengalsScore)
+		fmt.Printf("Rams win by %0.2f!\n", diff)
 	} else {
-		fmt.Printf("Bengals win by %0.2f!\n", bengalsScore-ramsScore)
+		fmt.Printf("Bengals win by %0.2f!\n", diff)
 	}
 
 	/*
