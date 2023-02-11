@@ -10,6 +10,7 @@ import (
 )
 
 const weekCount = 18
+const year = 2022
 
 type Team struct {
 	Abbrev string
@@ -30,7 +31,7 @@ func fetchWeek(num int) {
 	fmt.Printf("Fetching week %d...\n", num)
 
 	// Fetch
-	url := fmt.Sprintf("https://www.espn.com/nfl/schedule/_/week/%d/year/2022/seasontype/2", num)
+	url := fmt.Sprintf("https://www.espn.com/nfl/schedule/_/week/%d/year/%d/seasontype/2", num, year)
 	res, err := http.Get(url)
 	handle(err)
 	body, err := io.ReadAll(res.Body)
