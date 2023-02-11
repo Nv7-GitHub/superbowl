@@ -14,6 +14,8 @@ const weekCount = 18
 type Team struct {
 	Abbrev string
 	Name   string
+	Wins   map[string]struct{}
+	Losses map[string]struct{}
 }
 
 type Game struct {
@@ -55,6 +57,8 @@ func fetchWeek(num int) {
 				t := Team{
 					Abbrev: team.(map[string]any)["abbrev"].(string),
 					Name:   team.(map[string]any)["displayName"].(string),
+					Wins:   make(map[string]struct{}),
+					Losses: make(map[string]struct{}),
 				}
 				teams[t.Abbrev] = t
 				if v, ok := team.(map[string]any)["winner"]; ok && v.(bool) {
@@ -88,6 +92,8 @@ func fetch() {
 			teams[k] = Team{
 				Abbrev: v.(map[string]any)["Abbrev"].(string),
 				Name:   v.(map[string]any)["Name"].(string),
+				Wins:   make(map[string]struct{}),
+				Losses: make(map[string]struct{}),
 			}
 		}
 		for _, v := range data["games"].([]any) {
